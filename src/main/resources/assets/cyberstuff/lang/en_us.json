@@ -1,0 +1,13 @@
+{
+  "itemGroup.cyberstuff": "Example Mod Tab",
+  "block.cyberstuff.example_block": "Example Block",
+  "item.cyberstuff.example_item": "Example Item",
+
+  "cyberstuff.configuration.title": "Cyber Stuff Configs",
+  "cyberstuff.configuration.section.cyberstuff.common.toml": "Cyber Stuff Configs",
+  "cyberstuff.configuration.section.cyberstuff.common.toml.title": "Cyber Stuff Configs",
+  "cyberstuff.configuration.items": "Item List",
+  "cyberstuff.configuration.logDirtBlock": "Log Dirt Block",
+  "cyberstuff.configuration.magicNumberIntroduction": "Magic Number Text",
+  "cyberstuff.configuration.magicNumber": "Magic Number"
+}
