@@ -30,6 +30,8 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import ru.re1coded.cyberstuff.component.CustomDataComponent;
+import ru.re1coded.cyberstuff.items.ModItems;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(CyberStuff.MODID)
@@ -75,6 +77,10 @@ public class CyberStuff {
         ITEMS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
+
+        CustomDataComponent.register(modEventBus);
+
+        ModItems.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (CyberStuff) to respond directly to events.
