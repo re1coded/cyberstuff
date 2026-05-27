@@ -21,8 +21,7 @@ public class ModItems {
 
     public static final DeferredItem<Item> SYRINGE_USED = ITEMS.registerSimpleItem("syringe_used");
 
-    public static final DeferredHolder<Item, Item> ADRENALINE_BOOSTER = ITEMS.register("adrenaline_booster_common", () ->
-            new ImplantItem(new Item.Properties()));
+    public static final DeferredItem<Item> IMPLANT = ITEMS.registerItem("implant", ImplantItem::new);
 
 
     public static void register(IEventBus eventBus) {

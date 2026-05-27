@@ -4,6 +4,7 @@
   "item.cyberstuff.example_item": "Example Item",
   "item.cyberstuff.syringe": "Syringe",
   "item.cyberstuff.syringe_used": "Used syringe",
+  "item.cyberstuff.implant": "Cyberimplant",
 
   "cyberstuff.configuration.title": "Cyber Stuff Configs",
   "cyberstuff.configuration.section.cyberstuff.common.toml": "Cyber Stuff Configs",
@@ -13,5 +14,8 @@
   "cyberstuff.configuration.magicNumberIntroduction": "Magic Number Text",
 
   "tooltip.cyberstuff.syringe.type": "Type: ",
-  "tooltip.cyberstuff.syringe.implant_name": "Contains implant: "
+  "tooltip.cyberstuff.syringe.implant_name": "Contains implant: ",
+
+  "tooltip.cyberstuff.implant.desc.adrenaline_booster": "Adrenaline Booster",
+  "tooltip.cyberstuff.implant.rarity.epic": "Level 4"
 }

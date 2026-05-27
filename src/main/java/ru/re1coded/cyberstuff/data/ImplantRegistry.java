@@ -1,10 +1,12 @@
 package ru.re1coded.cyberstuff.data;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.CustomModelData;
 import ru.re1coded.cyberstuff.component.ModDataComponent;
 
 import java.util.*;
@@ -34,6 +36,7 @@ public class ImplantRegistry {
         getOrThrow(id);
         ItemStack stack = new ItemStack(implant);
         stack.set(ModDataComponent.IMPLANT_BASIC.get(), new ImplantData(id, rarity, hasBonus));
+        stack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(List.of(), List.of(), List.of(id.getPath()), List.of()));
         return stack;
     }
 

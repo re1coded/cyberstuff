@@ -13,7 +13,7 @@ public class ModAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, CyberStuff.MODID);
 
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<ImplantSlots>> IMPLANT_SLOTS = ATTACHMENT_TYPES.register("implant_slot", () ->
-            AttachmentType.<ImplantSlots>builder(ImplantSlots::new).serialize(ImplantSlots.CODEC.fieldOf("implant_slots")).copyOnDeath().build());
+            AttachmentType.builder(ImplantSlots::new).serialize(ImplantSlots.CODEC.fieldOf("implant_slots")).copyOnDeath().build());
 
     private ModAttachments() {}
 }

@@ -18,7 +18,7 @@ import ru.re1coded.cyberstuff.effects.IImplantEffect;
 public class ImplantEventHandler {
 
     @SubscribeEvent
-    public static void onPlayerTick(PlayerTickEvent event) {
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         ImplantSlots slots = player.getData(ModAttachments.IMPLANT_SLOTS);

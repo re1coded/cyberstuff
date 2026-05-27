@@ -23,18 +23,5 @@ public class ModImplants {
                         )
                 )
         ));
-
-        ImplantRegistry.register(new ImplantDefinition(
-                Identifier.fromNamespaceAndPath("cyberstuff", "adrenaline_booster"),
-                ImplantSlotType.BLOOD_SYSTEM,
-                List.of(
-                        new IImplantEffect.OnNearbyDeathEffect(
-                                2.0,
-                                MobEffects.SATURATION,
-                                1,
-                                400
-                        )
-                )
-        ));
     }
 }

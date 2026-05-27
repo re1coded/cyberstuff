@@ -1,6 +1,9 @@
 package ru.re1coded.cyberstuff;
 
+import com.geckolib.renderer.base.GeoRenderState;
 import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.*;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -9,10 +12,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.MapColor;
@@ -29,8 +28,10 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import ru.re1coded.cyberstuff.attachments.ModAttachments;
 import ru.re1coded.cyberstuff.blocks.ModBlocks;
 import ru.re1coded.cyberstuff.component.ModDataComponent;
+import ru.re1coded.cyberstuff.data.ImplantDefinition;
 import ru.re1coded.cyberstuff.data.ImplantRegistry;
 import ru.re1coded.cyberstuff.items.ModImplants;
 import ru.re1coded.cyberstuff.items.ModItems;
@@ -49,10 +50,23 @@ public class CyberStuff {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.cyberstuff")) //The language key for the title of your CreativeModeTab
             .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> ModItems.SYRINGE.get().getDefaultInstance())
+            .icon(() -> ImplantRegistry.createStack(
+                    ModItems.IMPLANT.get(),
+                    Identifier.fromNamespaceAndPath(CyberStuff.MODID, "adrenaline_booster"),
+                    Rarity.EPIC,
+                    false
+            ))
             .displayItems((parameters, output) -> {
                 output.accept(ModItems.SYRINGE.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
                 output.accept(ModItems.SYRINGE_USED.get());
+                for (ImplantDefinition def : ImplantRegistry.getAll()) {
+                    output.accept(ImplantRegistry.createStack(
+                            ModItems.IMPLANT.get(),
+                            def.id(),
+                            Rarity.EPIC,
+                            false
+                    ));
+                }
             }).build());
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
@@ -68,15 +82,13 @@ public class CyberStuff {
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
 
+        ModAttachments.ATTACHMENT_TYPES.register(modEventBus);
 
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (CyberStuff) to respond directly to events.
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
-
-        // Register the item to a creative tab
-        modEventBus.addListener(this::addCreative);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -85,9 +97,6 @@ public class CyberStuff {
     private void commonSetup(FMLCommonSetupEvent event) {
         ModImplants.register(); // not a custom registry, more like an init for implants
     }
-
-    // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {}
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
