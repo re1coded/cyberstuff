@@ -1,35 +1,35 @@
 package ru.re1coded.cyberstuff.items;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
-import ru.re1coded.cyberstuff.component.CustomDataComponent;
+import ru.re1coded.cyberstuff.component.ModDataComponent;
+import ru.re1coded.cyberstuff.data.SyringeData;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 
 public class SyringeItem extends Item {
 
-    private String type;
-
     private String implant_name;
 
-    public SyringeItem(Item.Properties properties, String type, @Nullable String contains_implant) {
-        super(properties);
-
-        this.type = type;
-        this.implant_name = contains_implant;
+    public SyringeItem(Item.Properties properties) {
+        super(properties.stacksTo(1));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.type, this.implant_name);
+        return Objects.hash(this.implant_name);
     }
 
     @Override
@@ -38,7 +38,6 @@ public class SyringeItem extends Item {
             return true;
         } else {
             return obj instanceof SyringeItem item
-                    && Objects.equals(this.type, item.type)
                     && Objects.equals(this.implant_name, item.implant_name);
         }
     }
@@ -46,23 +45,33 @@ public class SyringeItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        SyringeData syringeData = itemStack.get(CustomDataComponent.SYRINGE_BASIC.get());
+        SyringeData syringeData = itemStack.get(ModDataComponent.SYRINGE_BASIC.get());
 
-        if (syringeData != null) {
-            String typeData = syringeData.type();
-            String implantNameData = syringeData.implantName();
 
-            // do something
+        if (!level.isClientSide()) {
+            if (syringeData != null) {
+
+                itemStack.shrink(1);
+
+
+                level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEE_STING, SoundSource.BLOCKS);
+            }
         }
+
+        ItemStack reward = new ItemStack(ModItems.SYRINGE_USED.get());
+        player.addItem(reward);
 
         // TODO: Play sound
         // TODO: Code and apply effect
-        itemStack.shrink(1);
-        return InteractionResult.CONSUME;
+
+        return InteractionResult.PASS;
     }
 
     @Override
-    public int getMaxStackSize(ItemStack stack) {
-        return 1;
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+        SyringeData syringeData = itemStack.get(ModDataComponent.SYRINGE_BASIC.get());
+        if (syringeData == null) return;
+        //description
+        builder.accept(Component.translatable("tooltip.cyberstuff.implant.desc." + syringeData.implantName().getPath()).withStyle(ChatFormatting.GRAY));
     }
- }
+}

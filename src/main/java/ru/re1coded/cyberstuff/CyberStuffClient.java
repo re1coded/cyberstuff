@@ -25,7 +25,5 @@ public class CyberStuffClient {
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
         // Some client setup code
-        CyberStuff.LOGGER.info("HELLO FROM CLIENT SETUP");
-        CyberStuff.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
     }
 }

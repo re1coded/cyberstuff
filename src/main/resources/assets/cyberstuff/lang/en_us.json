@@ -2,6 +2,8 @@
   "itemGroup.cyberstuff": "Example Mod Tab",
   "block.cyberstuff.example_block": "Example Block",
   "item.cyberstuff.example_item": "Example Item",
+  "item.cyberstuff.syringe": "Syringe",
+  "item.cyberstuff.syringe_used": "Used syringe",
 
   "cyberstuff.configuration.title": "Cyber Stuff Configs",
   "cyberstuff.configuration.section.cyberstuff.common.toml": "Cyber Stuff Configs",
@@ -9,5 +11,7 @@
   "cyberstuff.configuration.items": "Item List",
   "cyberstuff.configuration.logDirtBlock": "Log Dirt Block",
   "cyberstuff.configuration.magicNumberIntroduction": "Magic Number Text",
-  "cyberstuff.configuration.magicNumber": "Magic Number"
+
+  "tooltip.cyberstuff.syringe.type": "Type: ",
+  "tooltip.cyberstuff.syringe.implant_name": "Contains implant: "
 }
