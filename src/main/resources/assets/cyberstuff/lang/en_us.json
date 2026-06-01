@@ -13,6 +13,8 @@
   "cyberstuff.configuration.logDirtBlock": "Log Dirt Block",
   "cyberstuff.configuration.magicNumberIntroduction": "Magic Number Text",
 
+  "tooltip.cyberstuff.implant.unique": "Unique Implant",
+
   "tooltip.cyberstuff.syringe.type": "Type: ",
   "tooltip.cyberstuff.syringe.implant_name": "Contains implant: ",
 

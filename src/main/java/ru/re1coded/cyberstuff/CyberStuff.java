@@ -4,6 +4,8 @@ import com.geckolib.renderer.base.GeoRenderState;
 import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.*;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -33,8 +35,10 @@ import ru.re1coded.cyberstuff.blocks.ModBlocks;
 import ru.re1coded.cyberstuff.component.ModDataComponent;
 import ru.re1coded.cyberstuff.data.ImplantDefinition;
 import ru.re1coded.cyberstuff.data.ImplantRegistry;
+import ru.re1coded.cyberstuff.events.ImplantEventHandler;
 import ru.re1coded.cyberstuff.items.ModImplants;
 import ru.re1coded.cyberstuff.items.ModItems;
+import ru.re1coded.cyberstuff.network.ActivateImplantPacket;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(CyberStuff.MODID)
@@ -53,8 +57,7 @@ public class CyberStuff {
             .icon(() -> ImplantRegistry.createStack(
                     ModItems.IMPLANT.get(),
                     Identifier.fromNamespaceAndPath(CyberStuff.MODID, "adrenaline_booster"),
-                    Rarity.EPIC,
-                    false
+                    Rarity.EPIC
             ))
             .displayItems((parameters, output) -> {
                 output.accept(ModItems.SYRINGE.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
@@ -63,8 +66,7 @@ public class CyberStuff {
                     output.accept(ImplantRegistry.createStack(
                             ModItems.IMPLANT.get(),
                             def.id(),
-                            Rarity.EPIC,
-                            false
+                            Rarity.EPIC
                     ));
                 }
             }).build());
@@ -92,6 +94,8 @@ public class CyberStuff {
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        modEventBus.addListener(this::registerPayloads);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -101,5 +105,14 @@ public class CyberStuff {
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
+    }
+
+    private void registerPayloads(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar("1");
+        registrar.playToServer(
+                ActivateImplantPacket.TYPE,
+                ActivateImplantPacket.STREAM_CODEC,
+                ImplantEventHandler::handleActivateImplant
+        );
     }
 }

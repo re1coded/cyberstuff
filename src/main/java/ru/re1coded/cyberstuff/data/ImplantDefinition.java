@@ -7,11 +7,11 @@ import ru.re1coded.cyberstuff.effects.IImplantEffect;
 
 import java.util.List;
 
-public record ImplantDefinition(Identifier id, ImplantSlotType slotType, List<IImplantEffect> effectList) {
+public record ImplantDefinition(Identifier id, ImplantSlotType slotType, boolean isUnique, List<IImplantEffect> effectList) {
 
-    public void applyAll(ServerPlayer player, Rarity rarity, boolean hasBonus) {
+    public void applyAll(ServerPlayer player, Rarity rarity, boolean isUnique) {
         for (IImplantEffect effect : effectList) {
-            effect.apply(player, rarity, hasBonus);
+            effect.apply(player, rarity, isUnique);
         }
     }
 
@@ -20,5 +20,4 @@ public record ImplantDefinition(Identifier id, ImplantSlotType slotType, List<II
             effect.remove(player);
         }
     }
-
 }
