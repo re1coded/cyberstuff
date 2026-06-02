@@ -6,6 +6,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
+import org.w3c.dom.Attr;
 import ru.re1coded.cyberstuff.CyberStuff;
 import ru.re1coded.cyberstuff.data.ImplantDefinition;
 import ru.re1coded.cyberstuff.data.ImplantRegistry;
@@ -17,19 +18,7 @@ import java.util.List;
 
 public class ModImplants {
     public static void register() {
-        ImplantRegistry.register(new ImplantDefinition(
-                Identifier.fromNamespaceAndPath("cyberstuff", "adrenaline_booster"),
-                ImplantSlotType.BLOOD_SYSTEM,
-                false,
-                List.of(
-                        new IImplantEffect.OnNearbyDeathEffect(
-                                2.0,
-                                MobEffects.SATURATION,
-                                1,
-                                400
-                        )
-                )
-        ));
+
         //frontal cortex (brain)
         //TODO: quickhacks
         /*
@@ -294,6 +283,126 @@ public class ModImplants {
         ));
 
         //TODO: sentry, stalker, oracle
+
+        // arms TODO
+
+        // hands TODO
+
+        // blood system
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "adrenaline_booster"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        new IImplantEffect.OnNearbyDeathEffect(
+                                2.0,
+                                MobEffects.SATURATION,
+                                1,
+                                400
+                        )
+                )
+        ));
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "biomonitor"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        new IImplantEffect.AutoHealEffect(
+                                1,
+                                300
+                        )
+                )
+        ));
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "black_mambo"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        new IImplantEffect.OnHitEffect(
+                                MobEffects.STRENGTH,
+                                0,
+                                120
+                        )
+                )
+        ));
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "blood_pump"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        new IActiveImplantEffect.ActiveToggleEffect(
+                                new IImplantEffect.StatusEffect(
+                                        MobEffects.HEALTH_BOOST,
+                                        3
+                                ),
+                                600
+                        )
+                )
+        ));
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "heal_on_kill"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        new IImplantEffect.OnNearbyDeathEffect(
+                                5,
+                                MobEffects.REGENERATION,
+                                0,
+                                200
+                        )
+                )
+        ));
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "microrotors"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        new IImplantEffect.AttributeModifierEffect(
+                                Identifier.fromNamespaceAndPath(CyberStuff.MODID, "microrotors_attack_speed"),
+                                Attributes.ATTACK_SPEED,
+                                3,
+                                AttributeModifier.Operation.ADD_VALUE
+                        )
+                )
+        ));
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "second_heart"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        new IActiveImplantEffect.ActiveToggleEffect(
+                                new IImplantEffect.LowHealthEffect(
+                                        "regeneration",
+                                        0.1,
+                                        5,
+                                        200
+                                ),
+                                6000
+                        )
+
+                )
+        ));
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "threat_evac"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        new IImplantEffect.LowHealthEffect(
+                                "speed",
+                                0.25,
+                                0,
+                                500
+                        )
+                )
+        ));
 
         // skin
 
@@ -629,7 +738,8 @@ public class ModImplants {
                 ImplantSlotType.SKELETON,
                 false,
                 List.of(
-                        new IImplantEffect.LowHealthRegenEffect(
+                        new IImplantEffect.LowHealthEffect(
+                                "regeneration",
                                 0.5,
                                 0,
                                 500
@@ -661,7 +771,8 @@ public class ModImplants {
                 ImplantSlotType.SKELETON,
                 false,
                 List.of(
-                        new IImplantEffect.LowHealthRegenEffect(
+                        new IImplantEffect.LowHealthEffect(
+                                "regeneration",
                                 0.5,
                                 0,
                                 500

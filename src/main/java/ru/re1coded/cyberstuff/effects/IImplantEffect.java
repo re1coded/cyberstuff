@@ -1,6 +1,7 @@
 package ru.re1coded.cyberstuff.effects;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,13 +16,23 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.component.Consumable;
 import ru.re1coded.cyberstuff.attachments.ModAttachments;
 import ru.re1coded.cyberstuff.data.ImplantData;
 import ru.re1coded.cyberstuff.data.ImplantSlots;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface IImplantEffect {
 
@@ -278,7 +289,8 @@ public interface IImplantEffect {
         @Override public void remove(ServerPlayer player) {}
     }
 
-    record LowHealthRegenEffect(
+    record LowHealthEffect(
+            String id,
             double healthThreshold,
             int baseAmplifier,
             int baseDuration
@@ -296,13 +308,22 @@ public interface IImplantEffect {
                     case RARE   -> 2; case EPIC     -> 3;
                 } + (hasBonus ? 1 : 0);
                 int duration = (int)(baseDuration * getMultiplier(rarity, hasBonus));
+                if (id.equals("regeneration")) {
+                    player.addEffect(new MobEffectInstance(
+                            MobEffects.REGENERATION, duration, amplifier, false, true
+                    ));
+                } else if (id.equals("speed")) {
+                    player.addEffect(new MobEffectInstance(
+                            MobEffects.SPEED, duration, amplifier, false, true
+                    ));
+                }
 
-                player.addEffect(new MobEffectInstance(
-                        MobEffects.REGENERATION, duration, amplifier, false, true
-                ));
             } else {
-                // Убираем эффект если здоровье восстановилось выше порога
-                player.removeEffect(MobEffects.REGENERATION);
+                if (id.equals("regeneration")) {
+                    player.removeEffect(MobEffects.REGENERATION);
+                } else if (id.equals("speed")) {
+                    player.removeEffect(MobEffects.SPEED);
+                }
             }
         }
 
@@ -477,6 +498,87 @@ public interface IImplantEffect {
         @Override
         public void remove(ServerPlayer player) {
         }
+    }
+
+    record AutoHealEffect(
+            float durationAmplifier,
+            int baseCooldownTicks
+    ) implements IImplantEffect {
+
+        // Приоритет предметов — от лучшего к худшему
+        private static final List<Predicate<ItemStack>> HEAL_ITEM_PRIORITIES = List.of(
+                stack -> stack.is(Items.ENCHANTED_GOLDEN_APPLE),
+                stack -> stack.is(Items.GOLDEN_APPLE),
+                stack -> isHealingPotion(stack)
+        );
+
+        private static boolean isHealingPotion(ItemStack stack) {
+            if (!stack.is(Items.POTION)) return false;
+            PotionContents content = stack.get(DataComponents.POTION_CONTENTS);
+            return content.is(Potions.REGENERATION);
+        }
+
+        public void tryAutoHeal(ServerPlayer player, Identifier implantId,
+                                Rarity rarity, boolean hasBonus) {
+            ImplantSlots slots = player.getData(ModAttachments.IMPLANT_SLOTS.get());
+            if (slots.isOnCooldown(implantId)) return;
+
+            float currentHealth = player.getHealth();
+            float maxHealth = player.getMaxHealth();
+            if (currentHealth / maxHealth > 0.5) return;
+
+            // Ищем предмет по приоритету
+            for (Predicate<ItemStack> priority : HEAL_ITEM_PRIORITIES) {
+                if (tryUseItem(player, priority, rarity)) {
+                    int cooldown = (int)(baseCooldownTicks
+                            / getMultiplier(rarity, hasBonus));
+                    slots.setCooldown(implantId, cooldown);
+                    return;
+                }
+            }
+        }
+
+        private boolean tryUseItem(ServerPlayer player, Predicate<ItemStack> predicate, Rarity rarity) {
+            Inventory inventory = player.getInventory();
+
+            for (int i = 0; i < inventory.getContainerSize(); i++) {
+                ItemStack stack = inventory.getItem(i);
+                if (stack.isEmpty() || !predicate.test(stack)) continue;
+
+                applyItem(player, stack, rarity);
+                stack.shrink(1); // уменьшаем стак на 1
+                return true;
+            }
+            return false;
+        }
+
+        private void applyItem(ServerPlayer player, ItemStack stack, Rarity rarity) {
+            if (stack.is(Items.ENCHANTED_GOLDEN_APPLE) || stack.is(Items.GOLDEN_APPLE)) {
+                // Применяем эффекты золотого яблока вручную
+                Consumable food = stack.get(DataComponents.CONSUMABLE);
+                if (food != null) {
+                    food.onConsumeEffects().forEach((action) -> action.apply(player.level(), stack, player));
+                }
+
+            } else if (isHealingPotion(stack)) {
+                // Применяем эффекты зелья
+                PotionContents content = stack.get(DataComponents.POTION_CONTENTS);
+                content.applyToLivingEntity(player, getDurationScale(rarity));
+                // Возвращаем стеклянную бутылку
+                player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
+            }
+        }
+
+        private float getDurationScale(Rarity rarity) {
+            float finalDuration = durationAmplifier * switch (rarity) {
+                case COMMON -> 0f; case UNCOMMON -> 0.5f;
+                case RARE   -> 1f; case EPIC     -> 1.5f;
+            };
+            return finalDuration;
+        }
+
+        @Override public void apply(ServerPlayer player, Rarity rarity, boolean hasBonus) {}
+        @Override public void remove(ServerPlayer player) {}
     }
 
 }

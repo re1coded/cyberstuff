@@ -5,6 +5,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -51,8 +53,8 @@ public class ImplantEventHandler {
                             effect.apply(player, data.rarity(), def.isUnique());
                         }
 
-                        if (effect instanceof IImplantEffect.LowHealthRegenEffect lowHealthRegen) {
-                            lowHealthRegen.onTick(player, data.rarity(), def.isUnique());
+                        if (effect instanceof IImplantEffect.LowHealthEffect lowHealth) {
+                            lowHealth.onTick(player, data.rarity(), def.isUnique());
                         }
                     }
                 }
@@ -141,6 +143,7 @@ public class ImplantEventHandler {
         ImplantSlots slots = player.getData(ModAttachments.IMPLANT_SLOTS.get());
         ServerPlayer finalPlayer = player;
         for (ImplantData data : slots.getInstalled()) {
+            if (data.id().equals(Identifier.fromNamespaceAndPath(CyberStuff.MODID, "black_mambo")) && !(target.hasEffect(MobEffects.POISON))) continue;
             ImplantRegistry.get(data.id()).ifPresent(def -> {
                 for (IImplantEffect effect : def.effectList()) {
                     if (effect instanceof IImplantEffect.OnHitEffect onHit) {
@@ -238,6 +241,15 @@ public class ImplantEventHandler {
                                 data.rarity(),
                                 def.isUnique()
                         ));
+                    }
+
+                    if (effect instanceof IImplantEffect.AutoHealEffect autoHeal) {
+                        // Считаем здоровье после получения урона
+                        float healthAfterDamage = player.getHealth() - event.getAmount();
+                        float maxHealth = player.getMaxHealth();
+                        if (healthAfterDamage / maxHealth <= 0.5) {
+                            autoHeal.tryAutoHeal(player, data.id(), data.rarity(), def.isUnique());
+                        }
                     }
 
                     if (effect instanceof IImplantEffect.ElectricShockEffect shock) {
