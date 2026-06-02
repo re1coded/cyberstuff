@@ -1,27 +1,6 @@
 {
   "model": {
-    "type": "minecraft:select",
-    "property": "minecraft:custom_model_data",
-    "index": 0,
-    "cases": [
-      {
-        "when": "adrenaline_booster",
-        "model": {
-          "type": "minecraft:model",
-          "model": "cyberstuff:item/adrenaline_booster"
-        }
-      },
-      {
-        "when": "adrenaline_converter",
-        "model": {
-          "type": "minecraft:model",
-          "model": "cyberstuff:item/adrenaline_converter"
-        }
-      }
-    ],
-    "fallback": {
-      "type": "minecraft:model",
-      "model": "minecraft:item/barrier"
-    }
+    "type": "minecraft:model",
+    "model": "cyberstuff:misc/implant_box_hpex"
   }
 }

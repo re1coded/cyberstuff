@@ -88,8 +88,7 @@ public interface IActiveImplantEffect extends IImplantEffect {
         }
 
         @Override
-        public void apply(ServerPlayer player, Rarity rarity, boolean hasBonus) {
-        }
+        public void apply(ServerPlayer player, Rarity rarity, boolean hasBonus) {}
 
         @Override
         public void remove(ServerPlayer player) {

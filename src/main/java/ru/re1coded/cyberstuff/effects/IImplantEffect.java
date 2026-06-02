@@ -22,7 +22,6 @@ import ru.re1coded.cyberstuff.data.ImplantSlots;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Predicate;
 
 public interface IImplantEffect {
 

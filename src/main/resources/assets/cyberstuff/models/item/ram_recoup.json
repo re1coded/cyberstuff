@@ -1,6 +1,0 @@
-{
-  "parent": "cyberstuff:misc/implant_box_hpex",
-  "textures": {
-    "layer0": "cyberstuff:item/ram_recoup"
-  }
-}

@@ -26,8 +26,6 @@ import ru.re1coded.cyberstuff.effects.IActiveImplantEffect;
 import ru.re1coded.cyberstuff.effects.IImplantEffect;
 import ru.re1coded.cyberstuff.network.ActivateImplantPacket;
 
-import static ru.re1coded.cyberstuff.effects.IImplantEffect.getMultiplier;
-
 @EventBusSubscriber(modid = CyberStuff.MODID)
 public class ImplantEventHandler {
 
