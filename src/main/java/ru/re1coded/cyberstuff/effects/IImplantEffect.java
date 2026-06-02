@@ -17,15 +17,14 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.item.Rarity;
 import ru.re1coded.cyberstuff.attachments.ModAttachments;
+import ru.re1coded.cyberstuff.data.ImplantData;
 import ru.re1coded.cyberstuff.data.ImplantSlots;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static net.minecraft.world.item.Rarity.UNCOMMON;
-
-public sealed interface IImplantEffect permits IActiveImplantEffect, IImplantEffect.ActiveGlowEffect, IImplantEffect.AttributeModifierEffect, IImplantEffect.CamoEffect, IImplantEffect.ConditionalEffect, IImplantEffect.CrouchBonusEffect, IImplantEffect.DamageReductionEffect, IImplantEffect.DistanceDamageReductionEffect, IImplantEffect.ElectricShockEffect, IImplantEffect.LowHealthRegenEffect, IImplantEffect.OnEatEffect, IImplantEffect.OnHitEffect, IImplantEffect.OnNearbyDeathEffect, IImplantEffect.OnTickEffect, IImplantEffect.ProjectileDeflectEffect, IImplantEffect.StatusEffect {
+public interface IImplantEffect {
 
     void apply(ServerPlayer player, Rarity rarity, boolean isUnique);
     void remove(ServerPlayer player);
@@ -412,35 +411,6 @@ public sealed interface IImplantEffect permits IActiveImplantEffect, IImplantEff
         @Override public void remove(ServerPlayer player) {}
     }
 
-    record ActiveGlowEffect(
-            double baseRadius,
-            int baseDuration,
-            int baseCooldownTicks,
-            Predicate<LivingEntity> entityFilter  // фильтр сущностей
-    ) implements IImplantEffect {
-
-        public void activate(ServerPlayer player, Rarity rarity, boolean hasBonus) {
-            double radius = baseRadius * getMultiplier(rarity, hasBonus);
-            int duration = (int)(baseDuration * getMultiplier(rarity, hasBonus));
-
-            player.level().getEntitiesOfClass(
-                    LivingEntity.class,
-                    player.getBoundingBox().inflate(radius),
-                    entity -> entity != player && entityFilter.test(entity)
-            ).forEach(entity ->
-                    entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, duration, 0))
-            );
-        }
-
-        public int getCooldown(Rarity rarity, boolean hasBonus) {
-            // Чем лучше редкость — тем меньше кулдаун
-            return (int)(baseCooldownTicks / getMultiplier(rarity, hasBonus));
-        }
-
-        @Override public void apply(ServerPlayer player, Rarity rarity, boolean hasBonus) {}
-        @Override public void remove(ServerPlayer player) {}
-    }
-
     record CamoEffect(
             double baseVisibility  // 0.0 - 1.0
     ) implements IImplantEffect {
@@ -451,6 +421,63 @@ public sealed interface IImplantEffect permits IActiveImplantEffect, IImplantEff
 
         @Override public void apply(ServerPlayer player, Rarity rarity, boolean hasBonus) {}
         @Override public void remove(ServerPlayer player) {}
+    }
+
+    record OnKillCooldownReduceEffect(
+            double baseReduction  // 0.0 - 1.0, например 0.3 = 30% от текущего кулдауна
+    ) implements IImplantEffect {
+
+        public void onKill(ServerPlayer player, Rarity rarity, boolean hasBonus) {
+            double reduction = baseReduction * getMultiplier(rarity, hasBonus);
+            ImplantSlots slots = player.getData(ModAttachments.IMPLANT_SLOTS.get());
+
+            for (ImplantData data : slots.getInstalled()) {
+                int current = slots.getCooldown(data.id());
+                if (current <= 0) continue;
+
+                int reduced = (int)(current * (1.0 - reduction));
+                slots.setCooldown(data.id(), reduced);
+            }
+        }
+
+        @Override public void apply(ServerPlayer player, Rarity rarity, boolean hasBonus) {}
+        @Override public void remove(ServerPlayer player) {}
+    }
+
+    record CooldownResetEffect(
+            int baseCooldownTicks  // собственный кулдаун усилителя
+    ) implements IImplantEffect {
+
+        public void onOtherImplantActivated(ServerPlayer player, Identifier activatedImplantId,
+                                            Identifier ownImplantId, Rarity rarity, boolean hasBonus) {
+            ImplantSlots slots = player.getData(ModAttachments.IMPLANT_SLOTS.get());
+
+            // Сам усилитель не должен быть на кулдауне
+            if (slots.isOnCooldown(ownImplantId)) return;
+
+            // Сбрасываем кулдаун активированного импланта
+            slots.setCooldown(activatedImplantId, 0);
+
+            // Ставим кулдаун на себя
+            int cooldown = (int)(baseCooldownTicks / getMultiplier(rarity, hasBonus));
+            slots.setCooldown(ownImplantId, cooldown);
+        }
+
+        @Override public void apply(ServerPlayer player, Rarity rarity, boolean hasBonus) {}
+        @Override public void remove(ServerPlayer player) {}
+    }
+
+    record DoubleJumpEffect(
+            double baseJumpStrength  // сила прыжка, 1.0 = обычный прыжок
+    ) implements IImplantEffect {
+
+        @Override
+        public void apply(ServerPlayer player, Rarity rarity, boolean hasBonus) {
+        }
+
+        @Override
+        public void remove(ServerPlayer player) {
+        }
     }
 
 }

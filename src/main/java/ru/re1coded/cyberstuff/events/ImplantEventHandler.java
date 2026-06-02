@@ -1,15 +1,15 @@
 package ru.re1coded.cyberstuff.events;
 
-import net.minecraft.advancements.criterion.PlayerHurtEntityTrigger;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
@@ -24,11 +24,9 @@ import ru.re1coded.cyberstuff.attachments.ModAttachments;
 import ru.re1coded.cyberstuff.data.*;
 import ru.re1coded.cyberstuff.effects.IActiveImplantEffect;
 import ru.re1coded.cyberstuff.effects.IImplantEffect;
-import ru.re1coded.cyberstuff.items.ModItems;
 import ru.re1coded.cyberstuff.network.ActivateImplantPacket;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import static ru.re1coded.cyberstuff.effects.IImplantEffect.getMultiplier;
 
 @EventBusSubscriber(modid = CyberStuff.MODID)
 public class ImplantEventHandler {
@@ -38,6 +36,8 @@ public class ImplantEventHandler {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         ImplantSlots slots = player.getData(ModAttachments.IMPLANT_SLOTS);
+
+        slots.setWasOnGround(player.onGround());
 
         slots.tickCooldowns();
 
@@ -57,6 +57,49 @@ public class ImplantEventHandler {
                             lowHealthRegen.onTick(player, data.rarity(), def.isUnique());
                         }
                     }
+                }
+            });
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingJump(LivingEvent.LivingJumpEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        ImplantSlots slots = player.getData(ModAttachments.IMPLANT_SLOTS.get());
+
+        // Игрок прыгнул с земли — сбрасываем флаг
+        if (player.onGround()) {
+            slots.setDoubleJumpUsed(false);
+            return;
+        }
+
+        // Игрок в воздухе — проверяем двойной прыжок
+        if (slots.isDoubleJumpUsed()) return;
+
+        for (ImplantData data : slots.getInstalled()) {
+            ImplantRegistry.get(data.id()).ifPresent(def -> {
+                for (IImplantEffect effect : def.effectList()) {
+                    if (!(effect instanceof IImplantEffect.DoubleJumpEffect doubleJump)) continue;
+
+                    double strength = doubleJump.baseJumpStrength();
+
+                    // Добавляем вертикальную скорость
+                    Vec3 velocity = player.getDeltaMovement();
+                    player.setDeltaMovement(velocity.x, strength * 0.42, velocity.z);
+                    player.hurtMarked = true; // синхронизируем с клиентом
+
+                    slots.setDoubleJumpUsed(true);
+
+                    // Частицы для визуального feedback
+                    ((ServerLevel) player.level()).sendParticles(
+                            player,
+                            ParticleTypes.CLOUD,
+                            true,
+                            true,
+                            player.getX(), player.getY(), player.getZ(),
+                            10, 0.3, 0, 0.3, 0.05
+                    );
                 }
             });
         }
@@ -114,6 +157,19 @@ public class ImplantEventHandler {
     public static void onLivingDeath(LivingDeathEvent event) {
         LivingEntity target = event.getEntity();
         if (!(target.level() instanceof ServerLevel level)) return;
+
+        if (event.getSource().getEntity() instanceof ServerPlayer killer) {
+            ImplantSlots slots = killer.getData(ModAttachments.IMPLANT_SLOTS.get());
+            for (ImplantData data : slots.getInstalled()) {
+                ImplantRegistry.get(data.id()).ifPresent(def -> {
+                    for (IImplantEffect effect : def.effectList()) {
+                        if (effect instanceof IImplantEffect.OnKillCooldownReduceEffect reduce) {
+                            reduce.onKill(killer, data.rarity(), def.isUnique());
+                        }
+                    }
+                });
+            }
+        }
 
         double maxRadius = ImplantRegistry.getAll().stream()
                 .flatMap(def -> def.effectList().stream())
@@ -212,10 +268,32 @@ public class ImplantEventHandler {
                                 data.id(),
                                 active.getCooldown(data.rarity(), def.isUnique())
                         );
+
+                        triggerCooldownReset(player, data.id());
                     }
                 });
             }
         });
+    }
+
+    private static void triggerCooldownReset(ServerPlayer player, Identifier activatedId) {
+        ImplantSlots slots = player.getData(ModAttachments.IMPLANT_SLOTS.get());
+
+        for (ImplantData data : slots.getInstalled()) {
+            // Не триггерим на том же импланте который только что активировали
+            if (data.id().equals(activatedId)) continue;
+
+            ImplantRegistry.get(data.id()).ifPresent(def -> {
+                for (IImplantEffect effect : def.effectList()) {
+                    if (effect instanceof IImplantEffect.CooldownResetEffect reset) {
+                        reset.onOtherImplantActivated(
+                                player, activatedId, data.id(),
+                                data.rarity(), def.isUnique()
+                        );
+                    }
+                }
+            });
+        }
     }
 
     @SubscribeEvent

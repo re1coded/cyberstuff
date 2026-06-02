@@ -1,12 +1,11 @@
 package ru.re1coded.cyberstuff.items;
 
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.item.Rarity;
 import ru.re1coded.cyberstuff.CyberStuff;
 import ru.re1coded.cyberstuff.data.ImplantDefinition;
 import ru.re1coded.cyberstuff.data.ImplantRegistry;
@@ -105,7 +104,7 @@ public class ModImplants {
         ));
 
         // TODO: quickhacks
-        /*
+
         ImplantRegistry.register(new ImplantDefinition(
                 Identifier.fromNamespaceAndPath("cyberstuff", "mechatronic_core"),
                 ImplantSlotType.BRAIN,
@@ -127,34 +126,30 @@ public class ModImplants {
                 )
         ));
 
-        // TODO: cooldowns and usables
         ImplantRegistry.register(new ImplantDefinition(
                 Identifier.fromNamespaceAndPath("cyberstuff", "newton_module"),
                 ImplantSlotType.BRAIN,
                 false,
                 List.of(
-                        //reduce cooldown by 1-10% after entity died
+                        new IImplantEffect.OnKillCooldownReduceEffect(0.0135)
                 )
         ));
 
-        // TODO: cooldowns and usables
         ImplantRegistry.register(new ImplantDefinition(
                 Identifier.fromNamespaceAndPath("cyberstuff", "axolotl"),
                 ImplantSlotType.BRAIN,
                 true,
                 List.of(
-                        //negate random cooldown after entity died
+                        new IImplantEffect.OnKillCooldownReduceEffect(0.0135)
                 )
         ));
 
-        // TODO: cooldowns and usables
         ImplantRegistry.register(new ImplantDefinition(
                 Identifier.fromNamespaceAndPath("cyberstuff", "quantum_tuner"),
                 ImplantSlotType.BRAIN,
                 true,
                 List.of(
-                        //negate the cooldown of all used implants
-                        //add base -10% cooldown time
+                        new IImplantEffect.CooldownResetEffect(1200)
                 )
         ));
 
@@ -179,7 +174,7 @@ public class ModImplants {
                         //add 1 base RAM
                 )
         ));
-        */
+
         //TODO: operating systems
         /*
         ImplantRegistry.register(new ImplantDefinition(
@@ -322,8 +317,15 @@ public class ModImplants {
                                 Attributes.ARMOR,
                                 7.5,
                                 AttributeModifier.Operation.ADD_VALUE
+                        ),
+                        new IImplantEffect.DamageReductionEffect(
+                                0.1,
+                                DamageTypes.EXPLOSION
+                        ),
+                        new IImplantEffect.DamageReductionEffect(
+                                0.2,
+                                DamageTypes.MACE_SMASH
                         )
-                        // new DamageRedictionEffect
                 )
         ));
 
@@ -385,7 +387,7 @@ public class ModImplants {
 
                 )
         ));
-        // TODO: cooldowns
+
         ImplantRegistry.register(new ImplantDefinition(
                 Identifier.fromNamespaceAndPath("cyberstuff", "optical_camo"),
                 ImplantSlotType.SKIN,

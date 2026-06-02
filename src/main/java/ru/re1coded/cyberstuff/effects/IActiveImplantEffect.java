@@ -17,7 +17,7 @@ import ru.re1coded.cyberstuff.data.ImplantSlots;
 
 import java.util.function.Predicate;
 
-public non-sealed interface IActiveImplantEffect extends IImplantEffect {
+public interface IActiveImplantEffect extends IImplantEffect {
     // Активация эффекта — вызывается при нажатии кнопки
     void activate(ServerPlayer player, Rarity rarity, boolean hasBonus);
 

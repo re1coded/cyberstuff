@@ -85,6 +85,16 @@ public class ImplantSlots {
         cooldowns.replaceAll((id, ticks) -> Math.max(0, ticks - 1));
     }
 
+    private boolean doubleJumpUsed = false;
+
+    public boolean isDoubleJumpUsed() { return doubleJumpUsed; }
+    public void setDoubleJumpUsed(boolean used) { doubleJumpUsed = used; }
+
+    private boolean wasOnGround = true;
+
+    public boolean wasOnGround() { return wasOnGround; }
+    public void setWasOnGround(boolean value) { wasOnGround = value; }
+
     public static final Codec<ImplantSlots> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     Codec.list(ImplantData.CODEC.optionalFieldOf("data")
@@ -99,9 +109,12 @@ public class ImplantSlots {
 
                     Codec.list(Identifier.CODEC)
                             .optionalFieldOf("active_toggles", List.of())
-                            .forGetter(s -> List.copyOf(s.activeToggles))
+                            .forGetter(s -> List.copyOf(s.activeToggles)),
+                    Codec.BOOL
+                            .optionalFieldOf("double_jump_used", false)
+                            .forGetter(s -> s.doubleJumpUsed)
 
-            ).apply(instance, (slotList, cdMap, toggleList) -> {
+            ).apply(instance, (slotList, cdMap, toggleList, hasDoubleJump) -> {
                 ImplantSlots result = new ImplantSlots();
                 for (int i = 0; i < Math.min(slotList.size(), MAX_SLOTS); i++) {
                     result.slots[i] = slotList.get(i);

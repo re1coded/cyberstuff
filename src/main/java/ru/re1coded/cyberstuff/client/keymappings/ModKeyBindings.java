@@ -10,7 +10,7 @@ import net.neoforged.neoforge.common.util.Lazy;
 import org.lwjgl.glfw.GLFW;
 import ru.re1coded.cyberstuff.CyberStuff;
 
-public class ModKeyBingings {
+public class ModKeyBindings {
 
     public static final KeyMapping.Category CYBERSTUFF_CATEGORY = new KeyMapping.Category(Identifier.fromNamespaceAndPath(CyberStuff.MODID, "category"));
 
