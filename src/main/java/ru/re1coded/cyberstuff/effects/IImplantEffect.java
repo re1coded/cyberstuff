@@ -1,10 +1,14 @@
 package ru.re1coded.cyberstuff.effects;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
@@ -17,6 +21,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -25,6 +30,9 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.Tags;
 import ru.re1coded.cyberstuff.attachments.ModAttachments;
 import ru.re1coded.cyberstuff.data.ImplantData;
 import ru.re1coded.cyberstuff.data.ImplantSlots;
@@ -287,6 +295,46 @@ public interface IImplantEffect {
 
         @Override public void apply(ServerPlayer player, Rarity rarity, boolean hasBonus) {}
         @Override public void remove(ServerPlayer player) {}
+    }
+
+    record ItemHoldShockEffect(
+            ItemStack requiredStack,
+            double radius,
+            int baseAmplifier,
+            int baseDuration
+    ) implements IImplantEffect {
+
+        public void shock(ServerPlayer player, Rarity rarity, boolean hasBonus) {
+
+            if (!(player.getMainHandItem().is(Tags.Items.MELEE_WEAPON_TOOLS))) return;
+
+            double effectiveRadius = radius * getMultiplier(rarity, hasBonus);
+            int amplifier = baseAmplifier + switch (rarity) {
+                case COMMON -> 0; case UNCOMMON -> 1;
+                case RARE   -> 2; case EPIC     -> 3;
+            } + (hasBonus ? 1 : 0);
+            int duration = (int)(baseDuration * getMultiplier(rarity, hasBonus));
+
+            player.level().getEntitiesOfClass(
+                    LivingEntity.class,
+                    player.getBoundingBox().inflate(effectiveRadius),
+                    entity -> entity != player && entity instanceof Enemy
+            ).forEach(entity -> {
+                entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, duration, amplifier));
+                entity.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, duration, amplifier));
+                entity.addEffect(new MobEffectInstance(MobEffects.POISON, duration, amplifier));
+            });
+        }
+
+        @Override
+        public void apply(ServerPlayer player, Rarity rarity, boolean isUnique) {
+
+        }
+
+        @Override
+        public void remove(ServerPlayer player) {
+
+        }
     }
 
     record LowHealthEffect(
@@ -575,6 +623,54 @@ public interface IImplantEffect {
                 case RARE   -> 1f; case EPIC     -> 1.5f;
             };
             return finalDuration;
+        }
+
+        @Override public void apply(ServerPlayer player, Rarity rarity, boolean hasBonus) {}
+        @Override public void remove(ServerPlayer player) {}
+    }
+
+    record ArrowTrajectoryEffect(
+            int simulationSteps,  // сколько точек траектории рисовать
+            ParticleOptions particle
+    ) implements IImplantEffect {
+
+        public void renderTrajectory(Player player, float partialTick) {
+            // Считаем силу натяжения
+            if (!player.isUsingItem()) return;
+            ItemStack useItem = player.getUseItem();
+            if (!useItem.is(Items.BOW) && !useItem.is(Items.CROSSBOW)) return;
+
+            int usingTicks = player.getUseItemRemainingTicks();
+            float power = (72000 - usingTicks) / 20.0f;
+            power = (power * power + power * 2.0f) / 3.0f;
+            power = Math.min(power, 1.0f) * 3.0f;
+
+            if (power < 0.1f) return; // лук почти не натянут
+
+            // Начальная позиция и скорость
+            Vec3 pos = player.getEyePosition(partialTick);
+            Vec3 direction = player.getViewVector(partialTick);
+            Vec3 velocity = direction.scale(power);
+
+            Level level = player.level();
+
+            // Симулируем полёт стрелы
+            for (int i = 0; i < simulationSteps; i++) {
+                // Гравитация и сопротивление воздуха — как у ванильной стрелы
+                velocity = new Vec3(
+                        velocity.x * 0.99,
+                        velocity.y * 0.99 - 0.05,
+                        velocity.z * 0.99
+                );
+                pos = pos.add(velocity.scale(0.5));
+
+                // Останавливаемся если попали в блок
+                BlockPos blockPos = BlockPos.containing(pos);
+                if (!level.getBlockState(blockPos).isAir()) break;
+
+                // Спауним частицу
+                level.addParticle(particle, pos.x, pos.y, pos.z, 0, 0, 0);
+            }
         }
 
         @Override public void apply(ServerPlayer player, Rarity rarity, boolean hasBonus) {}

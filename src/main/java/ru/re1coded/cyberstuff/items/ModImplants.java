@@ -1,11 +1,15 @@
 package ru.re1coded.cyberstuff.items;
 
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.item.Rarity;
 import org.w3c.dom.Attr;
 import ru.re1coded.cyberstuff.CyberStuff;
 import ru.re1coded.cyberstuff.data.ImplantDefinition;
@@ -286,7 +290,21 @@ public class ModImplants {
 
         // arms TODO
 
-        // hands TODO
+        // hands
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "ballistic_coprocessor"),
+                ImplantSlotType.EYES,
+                false,
+                List.of(
+                        new IImplantEffect.ArrowTrajectoryEffect(
+                                40,
+                                ParticleTypes.END_ROD
+                        )
+                )
+        ));
+
+
 
         // blood system
 
@@ -400,6 +418,117 @@ public class ModImplants {
                                 0.25,
                                 0,
                                 500
+                        )
+                )
+        ));
+
+        // nerve_system
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "adrenaline_converter"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        new IImplantEffect.OnHitEffect(
+                                MobEffects.SPEED,
+                                0,
+                                180
+                        )
+                )
+        ));
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "adreno_trigger"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                true,
+                List.of(
+                        new IImplantEffect.OnHitEffect(
+                                MobEffects.SPEED,
+                                0,
+                                180
+                        )
+                )
+        ));
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "atomic_sensors"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        new IImplantEffect.OnNearbyDeathEffect(
+                                7,
+                                MobEffects.SPEED,
+                                0,
+                                300
+                        )
+                )
+        ));
+        // TODO: kerenzikov
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "kerenzikov"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        //slow time
+                )
+        ));
+        // TODO: kerenzikov
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "reflex_tuner"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        // slow time
+                )
+        ));
+
+        // TODO: kerenzikov
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "revulsor"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                true,
+                List.of(
+                        // slow time
+                )
+        ));
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "stabber"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        new IImplantEffect.StatusEffect(
+                                MobEffects.STRENGTH,
+                                0
+                        )
+                )
+        ));
+        // TODO: kerenzikov
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "synaptic_accelerator"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        // slow time
+                )
+        ));
+
+        ImplantRegistry.register(new ImplantDefinition(
+                Identifier.fromNamespaceAndPath("cyberstuff", "tyrosine_injector"),
+                ImplantSlotType.BLOOD_SYSTEM,
+                false,
+                List.of(
+                        new IImplantEffect.OnNearbyDeathEffect(
+                                3,
+                                MobEffects.SPEED,
+                                0,
+                                120
+                        ),
+                        new IImplantEffect.OnNearbyDeathEffect(
+                                3,
+                                MobEffects.STRENGTH,
+                                0,
+                                120
                         )
                 )
         ));

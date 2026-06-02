@@ -255,6 +255,9 @@ public class ImplantEventHandler {
                     if (effect instanceof IImplantEffect.ElectricShockEffect shock) {
                         shock.shock(player, data.rarity(), def.isUnique());
                     }
+                    if (effect instanceof IImplantEffect.ItemHoldShockEffect itemShock) {
+                        itemShock.shock(player, data.rarity(), def.isUnique());
+                    }
                 }
             });
         }
