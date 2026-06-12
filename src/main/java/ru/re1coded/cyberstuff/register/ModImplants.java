@@ -1,16 +1,12 @@
-package ru.re1coded.cyberstuff.items;
+package ru.re1coded.cyberstuff.register;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.item.Rarity;
-import org.w3c.dom.Attr;
 import ru.re1coded.cyberstuff.CyberStuff;
 import ru.re1coded.cyberstuff.data.ImplantDefinition;
 import ru.re1coded.cyberstuff.data.ImplantRegistry;
@@ -21,7 +17,7 @@ import ru.re1coded.cyberstuff.effects.IImplantEffect;
 import java.util.List;
 
 public class ModImplants {
-    public static void register() {
+        public static void register() {
 
         //frontal cortex (brain)
         //TODO: quickhacks
@@ -303,8 +299,6 @@ public class ModImplants {
                         )
                 )
         ));
-
-
 
         // blood system
 

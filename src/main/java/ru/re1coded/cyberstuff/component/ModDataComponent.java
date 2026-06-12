@@ -2,7 +2,9 @@ package ru.re1coded.cyberstuff.component;
 
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import ru.re1coded.cyberstuff.CyberStuff;
 import ru.re1coded.cyberstuff.data.ImplantData;
@@ -29,6 +31,14 @@ public class ModDataComponent {
                     .persistent(ImplantData.CODEC)
                     .networkSynchronized(ImplantData.STREAM_CODEC)
     );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Identifier>> PENDING_IMPLANT =
+            REGISTER.register("pending_implant", () ->
+                    DataComponentType.<Identifier>builder()
+                            .persistent(Identifier.CODEC)
+                            .networkSynchronized(Identifier.STREAM_CODEC)
+                            .build()
+            );
 
     public static void register(IEventBus eventBus) {
         REGISTER.register(eventBus);

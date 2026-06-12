@@ -9,6 +9,7 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import ru.re1coded.cyberstuff.CyberStuff;
 import ru.re1coded.cyberstuff.attachments.ModAttachments;
+import ru.re1coded.cyberstuff.client.gui.ImplantViewScreen;
 import ru.re1coded.cyberstuff.client.keymappings.ModKeyBindings;
 import ru.re1coded.cyberstuff.data.ImplantData;
 import ru.re1coded.cyberstuff.data.ImplantRegistry;
@@ -42,6 +43,10 @@ public class ClientImplantHandler {
                     }
                 }
             });
+        }
+
+        if (ModKeyBindings.OPEN_IMPLANTS.get().consumeClick()) {
+            Minecraft.getInstance().setScreen(new ImplantViewScreen());
         }
     }
 }

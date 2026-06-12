@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class ImplantSlots {
@@ -13,6 +14,17 @@ public class ImplantSlots {
     private final ImplantData[] slots = new ImplantData[MAX_SLOTS];
     private final Map<Identifier, Integer> cooldowns = new HashMap<>();
     private final Set<Identifier> activeToggles = new HashSet<>();
+
+    @Nullable
+    private PendingImplant pendingImplant = null;
+
+    public Optional<PendingImplant> getPendingImplant() {
+        return Optional.ofNullable(pendingImplant);
+    }
+
+    public void setPendingImplant(@Nullable PendingImplant id) {
+        pendingImplant = id;
+    }
 
     public Optional<ImplantData> get(int slot) {
         return Optional.ofNullable(slots[slot]);
@@ -93,6 +105,7 @@ public class ImplantSlots {
     private boolean wasOnGround = true;
 
     public boolean wasOnGround() { return wasOnGround; }
+
     public void setWasOnGround(boolean value) { wasOnGround = value; }
 
     public static final Codec<ImplantSlots> CODEC = RecordCodecBuilder.create(instance ->
@@ -112,9 +125,12 @@ public class ImplantSlots {
                             .forGetter(s -> List.copyOf(s.activeToggles)),
                     Codec.BOOL
                             .optionalFieldOf("double_jump_used", false)
-                            .forGetter(s -> s.doubleJumpUsed)
+                            .forGetter(s -> s.doubleJumpUsed),
+                    PendingImplant.CODEC
+                            .optionalFieldOf("pending_implant")
+                            .forGetter(s -> Optional.ofNullable(s.pendingImplant))
 
-            ).apply(instance, (slotList, cdMap, toggleList, hasDoubleJump) -> {
+            ).apply(instance, (slotList, cdMap, toggleList, hasDoubleJump, pendingImplant) -> {
                 ImplantSlots result = new ImplantSlots();
                 for (int i = 0; i < Math.min(slotList.size(), MAX_SLOTS); i++) {
                     result.slots[i] = slotList.get(i);

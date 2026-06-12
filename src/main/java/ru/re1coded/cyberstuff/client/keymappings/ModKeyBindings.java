@@ -23,11 +23,22 @@ public class ModKeyBindings {
                     GLFW.GLFW_KEY_Y,
                     CYBERSTUFF_CATEGORY
             )
-            );
+    );
+
+    public static final Lazy<KeyMapping> OPEN_IMPLANTS = Lazy.of(() ->
+            new KeyMapping(
+                    "key.cyberstuff.show_implants",
+                    KeyConflictContext.IN_GAME,
+                    InputConstants.Type.KEYSYM,
+                    GLFW.GLFW_KEY_J,
+                    CYBERSTUFF_CATEGORY
+            )
+    );
 
     @SubscribeEvent
     public static void register(RegisterKeyMappingsEvent event) {
         event.registerCategory(CYBERSTUFF_CATEGORY);
         event.register(ACTIVATE_IMPLANT.get());
+        event.register(OPEN_IMPLANTS.get());
     }
 }

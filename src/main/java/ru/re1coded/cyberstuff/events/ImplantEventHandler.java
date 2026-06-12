@@ -1,32 +1,41 @@
 package ru.re1coded.cyberstuff.events;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import ru.re1coded.cyberstuff.CyberStuff;
 import ru.re1coded.cyberstuff.attachments.ModAttachments;
+import ru.re1coded.cyberstuff.component.ModDataComponent;
 import ru.re1coded.cyberstuff.data.*;
 import ru.re1coded.cyberstuff.effects.IActiveImplantEffect;
 import ru.re1coded.cyberstuff.effects.IImplantEffect;
 import ru.re1coded.cyberstuff.network.ActivateImplantPacket;
+import ru.re1coded.cyberstuff.network.RemoveImplantPacket;
+import ru.re1coded.cyberstuff.register.ModEffects;
+import ru.re1coded.cyberstuff.register.ModItems;
+
+import java.util.Optional;
 
 @EventBusSubscriber(modid = CyberStuff.MODID)
 public class ImplantEventHandler {
@@ -289,6 +298,49 @@ public class ImplantEventHandler {
         });
     }
 
+    public static void handleRemoveImplant(RemoveImplantPacket packet, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            if (!(context.player() instanceof ServerPlayer player)) return;
+
+            ImplantSlots slots = player.getData(ModAttachments.IMPLANT_SLOTS.get());
+            Optional<ImplantData> removed = slots.remove(packet.slotIndex(), player);
+
+            removed.ifPresent(data -> {
+                // Создаём шприц с данными снятого импланта
+                ItemStack syringeStack = new ItemStack(ModItems.SYRINGE.get());
+                syringeStack.set(ModDataComponent.SYRINGE_BASIC.get(),
+                        new SyringeData(data.id(), data.rarity())
+                );
+
+                // Расходуем шприц для снятия из руки
+                ItemStack handStack = player.getItemInHand(packet.hand());
+                handStack.shrink(1);
+
+                // Выдаём шприц с имплантом
+                player.addItem(syringeStack);
+
+                // Звук
+                player.level().playSound(null,
+                        player.getX(), player.getY(), player.getZ(),
+                        SoundEvents.BEE_STING, SoundSource.PLAYERS,
+                        1.0f, 0.8f
+                );
+
+                // Сообщение
+                player.sendSystemMessage(
+                        Component.translatable(
+                                "message.cyberstuff.implant_removed",
+                                Component.translatable(
+                                        "tooltip.cyberstuff.implant.desc." + data.id().getPath()
+                                )
+                        ).withStyle(ChatFormatting.YELLOW),
+                        false
+                );
+            });
+        });
+    }
+
+
     private static void triggerCooldownReset(ServerPlayer player, Identifier activatedId) {
         ImplantSlots slots = player.getData(ModAttachments.IMPLANT_SLOTS.get());
 
@@ -333,5 +385,68 @@ public class ImplantEventHandler {
                 }
             });
         }
+    }
+
+    @SubscribeEvent
+    public static void onEffectExpired(MobEffectEvent.Expired event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (!event.getEffectInstance().is(
+                ModEffects.SYRINGE_EFFECT)) return;
+
+        ImplantSlots slots = player.getData(ModAttachments.IMPLANT_SLOTS.get());
+
+        slots.getPendingImplant().ifPresent(pending -> {
+            ImplantDefinition def = ImplantRegistry.get(pending.implantId()).orElse(null);
+            if (def == null) {
+                slots.setPendingImplant(null);
+                return;
+            }
+
+            // Ищем свободный слот
+            boolean installed = false;
+            for (int i = 0; i < ImplantSlots.MAX_SLOTS; i++) {
+                if (slots.get(i).isPresent()) continue;
+
+                slots.install(i, new ImplantData(pending.implantId(), pending.rarity()));
+                def.applyAll(player, pending.rarity(), def.isUnique());
+
+                player.sendSystemMessage(
+                        Component.translatable(
+                                "message.cyberstuff.implant_installed",
+                                Component.translatable(
+                                        "tooltip.cyberstuff.implant.desc."
+                                                + pending.implantId().getPath()
+                                )
+                        ).withStyle(ChatFormatting.GREEN),
+                        false
+                );
+
+                player.level().playSound(null,
+                        player.getX(), player.getY(), player.getZ(),
+                        SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS,
+                        1.0f, 1.0f
+                );
+
+                installed = true;
+                break;
+            }
+
+            // Нет свободных слотов — возвращаем предмет игроку
+            if (!installed) {
+                ItemStack implantStack = ImplantRegistry.createStack(
+                        ModItems.IMPLANT.get(),
+                        pending.implantId(),
+                        pending.rarity()
+                );
+                player.addItem(implantStack);
+                player.sendSystemMessage(
+                        Component.translatable("message.cyberstuff.no_free_slot")
+                                .withStyle(ChatFormatting.RED),
+                        false
+                );
+            }
+
+            slots.setPendingImplant(null);
+        });
     }
 }

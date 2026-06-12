@@ -1,6 +1,1022 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "cyberstuff:misc/implant_box_hpex"
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": ["firstperson_righthand", "firstperson_lefthand",
+                 "thirdperson_righthand", "thirdperson_lefthand", "ground"],
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:custom_model_data",
+          "index": 0,
+          "cases": [
+  {
+    "when": "kerenzikov_boost_system",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/kerenzikov_boost_system"
+      }
+    }
+  },
+  {
+    "when": "mechatronic_core",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/mechatronic_core"
+      }
+    }
+  },
+  {
+    "when": "memory_boost",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/memory_boost"
+      }
+    }
+  },
+  {
+    "when": "newton_module",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/newton_module"
+      }
+    }
+  },
+  {
+    "when": "axolotl",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/axolotl"
+      }
+    }
+  },
+  {
+    "when": "quantum_tuner",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/quantum_tuner"
+      }
+    }
+  },
+  {
+    "when": "ram_upgrade",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/ram_upgrade"
+      }
+    }
+  },
+  {
+    "when": "self_ice",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/self_ice"
+      }
+    }
+  },
+  {
+    "when": "kiroshi_basic",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/kiroshi_basic"
+      }
+    }
+  },
+  {
+    "when": "kiroshi_clairvoyant",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/kiroshi_clairvoyant"
+      }
+    }
+  },
+  {
+    "when": "kiroshi_cockatrice",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/kiroshi_cockatrice"
+      }
+    }
+  },
+  {
+    "when": "kiroshi_doomsayer",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/kiroshi_doomsayer"
+      }
+    }
+  },
+  {
+    "when": "ballistic_coprocessor",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/ballistic_coprocessor"
+      }
+    }
+  },
+  {
+    "when": "adrenaline_booster",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/adrenaline_booster"
+      }
+    }
+  },
+  {
+    "when": "biomonitor",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/biomonitor"
+      }
+    }
+  },
+  {
+    "when": "black_mambo",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/black_mambo"
+      }
+    }
+  },
+  {
+    "when": "blood_pump",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/blood_pump"
+      }
+    }
+  },
+  {
+    "when": "heal_on_kill",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/heal_on_kill"
+      }
+    }
+  },
+  {
+    "when": "microrotors",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/microrotors"
+      }
+    }
+  },
+  {
+    "when": "second_heart",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/second_heart"
+      }
+    }
+  },
+  {
+    "when": "threat_evac",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/threat_evac"
+      }
+    }
+  },
+  {
+    "when": "adrenaline_converter",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/adrenaline_converter"
+      }
+    }
+  },
+  {
+    "when": "adreno_trigger",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/adreno_trigger"
+      }
+    }
+  },
+  {
+    "when": "atomic_sensors",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/atomic_sensors"
+      }
+    }
+  },
+  {
+    "when": "kerenzikov",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/kerenzikov"
+      }
+    }
+  },
+  {
+    "when": "reflex_tuner",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/reflex_tuner"
+      }
+    }
+  },
+  {
+    "when": "revulsor",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/revulsor"
+      }
+    }
+  },
+  {
+    "when": "stabber",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/stabber"
+      }
+    }
+  },
+  {
+    "when": "synaptic_accelerator",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/synaptic_accelerator"
+      }
+    }
+  },
+  {
+    "when": "tyrosine_injector",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/tyrosine_injector"
+      }
+    }
+  },
+  {
+    "when": "carapace",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/carapace"
+      }
+    }
+  },
+  {
+    "when": "cellular_adapter",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/cellular_adapter"
+      }
+    }
+  },
+  {
+    "when": "chitin",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/chitin"
+      }
+    }
+  },
+  {
+    "when": "cogito_lattice",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/cogito_lattice"
+      }
+    }
+  },
+  {
+    "when": "nano_plating",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/nano_plating"
+      }
+    }
+  },
+  {
+    "when": "optical_camo",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/optical_camo"
+      }
+    }
+  },
+  {
+    "when": "pain_editor",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/pain_editor"
+      }
+    }
+  },
+  {
+    "when": "painducer",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/painducer"
+      }
+    }
+  },
+  {
+    "when": "proxishield",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/proxishield"
+      }
+    }
+  },
+  {
+    "when": "peripheral_inverse",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/peripheral_inverse"
+      }
+    }
+  },
+  {
+    "when": "rangeguard",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/rangeguard"
+      }
+    }
+  },
+  {
+    "when": "shock_n_awe",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/shock_n_awe"
+      }
+    }
+  },
+  {
+    "when": "subdermal_armor",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/subdermal_armor"
+      }
+    }
+  },
+  {
+    "when": "bionic_joints",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/bionic_joints"
+      }
+    }
+  },
+  {
+    "when": "dense_marrow",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/dense_marrow"
+      }
+    }
+  },
+  {
+    "when": "epimorphic_skeleton",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/epimorphic_skeleton"
+      }
+    }
+  },
+  {
+    "when": "feen_x",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/feen_x"
+      }
+    }
+  },
+  {
+    "when": "para_bellum",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/para_bellum"
+      }
+    }
+  },
+  {
+    "when": "ram_recoup",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/ram_recoup"
+      }
+    }
+  },
+  {
+    "when": "rara_avis",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/rara_avis"
+      }
+    }
+  },
+  {
+    "when": "scar_coalescer",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/scar_coalescer"
+      }
+    }
+  },
+  {
+    "when": "scarab",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/scarab"
+      }
+    }
+  },
+  {
+    "when": "universal_booster",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/universal_booster"
+      }
+    }
+  },
+  {
+    "when": "fortified_ankles",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/fortified_ankles"
+      }
+    }
+  },
+  {
+    "when": "jenkins_tendons",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/jenkins_tendons"
+      }
+    }
+  },
+  {
+    "when": "leeroy_ligament_system",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/leeroy_ligament_system"
+      }
+    }
+  },
+  {
+    "when": "lynx_paws",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/lynx_paws"
+      }
+    }
+  },
+  {
+    "when": "reinforced_tendons",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:misc/implant_box_hpex",
+      "textures": {
+        "implant_texture": "cyberstuff:item/reinforced_tendons"
+      }
+    }
+  }
+
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/barrier"
+          }
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:select",
+      "property": "minecraft:custom_model_data",
+      "index": 0,
+      "cases": [
+  {
+    "when": "kerenzikov_boost_system",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/kerenzikov_boost_system_flat"
+    }
+  },
+  {
+    "when": "mechatronic_core",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/mechatronic_core_flat"
+    }
+  },
+  {
+    "when": "memory_boost",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/memory_boost_flat"
+    }
+  },
+  {
+    "when": "newton_module",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/newton_module_flat"
+    }
+  },
+  {
+    "when": "axolotl",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/axolotl_flat"
+    }
+  },
+  {
+    "when": "quantum_tuner",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/quantum_tuner_flat"
+    }
+  },
+  {
+    "when": "ram_upgrade",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/ram_upgrade_flat"
+    }
+  },
+  {
+    "when": "self_ice",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/self_ice_flat"
+    }
+  },
+  {
+    "when": "kiroshi_basic",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/kiroshi_basic_flat"
+    }
+  },
+  {
+    "when": "kiroshi_clairvoyant",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/kiroshi_clairvoyant_flat"
+    }
+  },
+  {
+    "when": "kiroshi_cockatrice",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/kiroshi_cockatrice_flat"
+    }
+  },
+  {
+    "when": "kiroshi_doomsayer",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/kiroshi_doomsayer_flat"
+    }
+  },
+  {
+    "when": "ballistic_coprocessor",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/ballistic_coprocessor_flat"
+    }
+  },
+  {
+    "when": "adrenaline_booster",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/adrenaline_booster_flat"
+    }
+  },
+  {
+    "when": "biomonitor",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/biomonitor_flat"
+    }
+  },
+  {
+    "when": "black_mambo",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/black_mambo_flat"
+    }
+  },
+  {
+    "when": "blood_pump",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/blood_pump_flat"
+    }
+  },
+  {
+    "when": "heal_on_kill",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/heal_on_kill_flat"
+    }
+  },
+  {
+    "when": "microrotors",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/microrotors_flat"
+    }
+  },
+  {
+    "when": "second_heart",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/second_heart_flat"
+    }
+  },
+  {
+    "when": "threat_evac",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/threat_evac_flat"
+    }
+  },
+  {
+    "when": "adrenaline_converter",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/adrenaline_converter_flat"
+    }
+  },
+  {
+    "when": "adreno_trigger",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/adreno_trigger_flat"
+    }
+  },
+  {
+    "when": "atomic_sensors",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/atomic_sensors_flat"
+    }
+  },
+  {
+    "when": "kerenzikov",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/kerenzikov_flat"
+    }
+  },
+  {
+    "when": "reflex_tuner",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/reflex_tuner_flat"
+    }
+  },
+  {
+    "when": "revulsor",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/revulsor_flat"
+    }
+  },
+  {
+    "when": "stabber",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/stabber_flat"
+    }
+  },
+  {
+    "when": "synaptic_accelerator",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/synaptic_accelerator_flat"
+    }
+  },
+  {
+    "when": "tyrosine_injector",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/tyrosine_injector_flat"
+    }
+  },
+  {
+    "when": "carapace",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/carapace_flat"
+    }
+  },
+  {
+    "when": "cellular_adapter",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/cellular_adapter_flat"
+    }
+  },
+  {
+    "when": "chitin",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/chitin_flat"
+    }
+  },
+  {
+    "when": "cogito_lattice",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/cogito_lattice_flat"
+    }
+  },
+  {
+    "when": "nano_plating",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/nano_plating_flat"
+    }
+  },
+  {
+    "when": "optical_camo",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/optical_camo_flat"
+    }
+  },
+  {
+    "when": "pain_editor",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/pain_editor_flat"
+    }
+  },
+  {
+    "when": "painducer",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/painducer_flat"
+    }
+  },
+  {
+    "when": "proxishield",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/proxishield_flat"
+    }
+  },
+  {
+    "when": "peripheral_inverse",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/peripheral_inverse_flat"
+    }
+  },
+  {
+    "when": "rangeguard",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/rangeguard_flat"
+    }
+  },
+  {
+    "when": "shock_n_awe",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/shock_n_awe_flat"
+    }
+  },
+  {
+    "when": "subdermal_armor",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/subdermal_armor_flat"
+    }
+  },
+  {
+    "when": "bionic_joints",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/bionic_joints_flat"
+    }
+  },
+  {
+    "when": "dense_marrow",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/dense_marrow_flat"
+    }
+  },
+  {
+    "when": "epimorphic_skeleton",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/epimorphic_skeleton_flat"
+    }
+  },
+  {
+    "when": "feen_x",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/feen_x_flat"
+    }
+  },
+  {
+    "when": "para_bellum",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/para_bellum_flat"
+    }
+  },
+  {
+    "when": "ram_recoup",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/ram_recoup_flat"
+    }
+  },
+  {
+    "when": "rara_avis",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/rara_avis_flat"
+    }
+  },
+  {
+    "when": "scar_coalescer",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/scar_coalescer_flat"
+    }
+  },
+  {
+    "when": "scarab",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/scarab_flat"
+    }
+  },
+  {
+    "when": "universal_booster",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/universal_booster_flat"
+    }
+  },
+  {
+    "when": "fortified_ankles",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/fortified_ankles_flat"
+    }
+  },
+  {
+    "when": "jenkins_tendons",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/jenkins_tendons_flat"
+    }
+  },
+  {
+    "when": "leeroy_ligament_system",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/leeroy_ligament_system_flat"
+    }
+  },
+  {
+    "when": "lynx_paws",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/lynx_paws_flat"
+    }
+  },
+  {
+    "when": "reinforced_tendons",
+    "model": {
+      "type": "minecraft:model",
+      "model": "cyberstuff:item/reinforced_tendons_flat"
+    }
+  }
+
+      ],
+      "fallback": {
+        "type": "minecraft:model",
+        "model": "minecraft:item/barrier"
+      }
+    }
   }
 }

@@ -21,13 +21,13 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import ru.re1coded.cyberstuff.attachments.ModAttachments;
-import ru.re1coded.cyberstuff.blocks.ModBlocks;
+import ru.re1coded.cyberstuff.client.gui.ReplicatorScreen;
+import ru.re1coded.cyberstuff.network.RemoveImplantPacket;
+import ru.re1coded.cyberstuff.register.*;
 import ru.re1coded.cyberstuff.component.ModDataComponent;
 import ru.re1coded.cyberstuff.data.ImplantDefinition;
 import ru.re1coded.cyberstuff.data.ImplantRegistry;
 import ru.re1coded.cyberstuff.events.ImplantEventHandler;
-import ru.re1coded.cyberstuff.items.ModImplants;
-import ru.re1coded.cyberstuff.items.ModItems;
 import ru.re1coded.cyberstuff.network.ActivateImplantPacket;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -52,6 +52,10 @@ public class CyberStuff {
             .displayItems((parameters, output) -> {
                 output.accept(ModItems.SYRINGE.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
                 output.accept(ModItems.SYRINGE_USED.get());
+                output.accept(ModItems.REMOVAL_SYRINGE.get());
+                output.accept(ModItems.NANOBOT_VIAL.get());
+                output.accept(ModItems.NANOBOT_VIAL_USED.get());
+                output.accept(ModItems.REPLICATOR.get());
                 for (ImplantDefinition def : ImplantRegistry.getAll()) {
                     output.accept(ImplantRegistry.createStack(
                             ModItems.IMPLANT.get(),
@@ -71,8 +75,10 @@ public class CyberStuff {
 
         ModDataComponent.register(modEventBus);
 
-        ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModItems.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
 
         ModAttachments.ATTACHMENT_TYPES.register(modEventBus);
 
@@ -86,6 +92,7 @@ public class CyberStuff {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         modEventBus.addListener(this::registerPayloads);
+        modEventBus.addListener(ReplicatorScreen::register);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -103,6 +110,12 @@ public class CyberStuff {
                 ActivateImplantPacket.TYPE,
                 ActivateImplantPacket.STREAM_CODEC,
                 ImplantEventHandler::handleActivateImplant
+        );
+
+        registrar.playToServer(
+                RemoveImplantPacket.TYPE,
+                RemoveImplantPacket.STREAM_CODEC,
+                ImplantEventHandler::handleRemoveImplant
         );
     }
 }
