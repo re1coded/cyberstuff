@@ -29,6 +29,8 @@ public class ModItems {
 
     public static final DeferredItem<Item> NANOBOT_VIAL_USED = ITEMS.registerSimpleItem("vial_used");
 
+    public static final DeferredItem<Item> MIXED_IRON = ITEMS.registerSimpleItem("mixed_iron");
+
     public static final DeferredItem<Item> IMPLANT = ITEMS.registerItem("implant", ImplantItem::new);
 
     public static final DeferredItem<BlockItem> REPLICATOR = ITEMS.registerSimpleBlockItem("replicator", ModBlocks.REPLICATOR);

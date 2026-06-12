@@ -51,6 +51,7 @@ public class CyberStuff {
             ))
             .displayItems((parameters, output) -> {
                 output.accept(ModItems.SYRINGE.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                output.accept(ModItems.MIXED_IRON.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
                 output.accept(ModItems.SYRINGE_USED.get());
                 output.accept(ModItems.REMOVAL_SYRINGE.get());
                 output.accept(ModItems.NANOBOT_VIAL.get());

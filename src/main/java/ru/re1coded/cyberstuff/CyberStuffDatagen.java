@@ -1,8 +1,6 @@
 package ru.re1coded.cyberstuff;
 
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.io.IOException;
 import java.nio.file.Files;

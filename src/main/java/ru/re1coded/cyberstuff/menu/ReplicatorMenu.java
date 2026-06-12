@@ -26,14 +26,17 @@ public class ReplicatorMenu extends AbstractContainerMenu {
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof ImplantItem
                         || stack.is(Items.GOLDEN_APPLE)
-                        || stack.is(Items.ENCHANTED_GOLDEN_APPLE);
+                        || stack.is(Items.ENCHANTED_GOLDEN_APPLE)
+                        || stack.is(Items.ECHO_SHARD)
+                        || stack.is(Items.POTION);
             }
         });
 
         addSlot(new Slot(container, ReplicatorBlockEntity.SLOT_SYRINGE, 31, 34) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(ModItems.SYRINGE_USED.get());
+                return stack.is(ModItems.SYRINGE_USED.get())
+                        || stack.is(ModItems.NANOBOT_VIAL_USED.get());
             }
         });
 

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "cyberstuff:mixed_iron",
+    "X": "minecraft:lime_dye",
+    "I": "minecraft:white_dye"
+  },
+  "pattern": [
+    " #I",
+    "#X#",
+    "## "
+  ],
+  "result": {
+    "count": 1,
+    "id": "cyberstuff:syringe_used"
+  }
+}

@@ -2,15 +2,20 @@ package ru.re1coded.cyberstuff.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import ru.re1coded.cyberstuff.CyberStuff;
@@ -78,6 +83,7 @@ public class ReplicatorBlockEntity extends BaseContainerBlockEntity implements M
         }
 
         // --- Рецепт 2: Золотое яблоко + шприц = лечащий шприц ---
+        /*
         if (isGoldenApple(input) && isSyringe(syringe) && nanobots.isEmpty()) {
             ItemStack result = new ItemStack(ModItems.SYRINGE.get());
             result.set(ModDataComponent.SYRINGE_BASIC.get(),
@@ -91,6 +97,27 @@ public class ReplicatorBlockEntity extends BaseContainerBlockEntity implements M
 
             input.shrink(1);
             syringe.shrink(1);
+        }
+        */
+
+        // --- Рецепт 3: Осколок эха + шприц + наноботы = шприц для удаления ---
+        if (isShardOfEcho(input) && isSyringe(syringe) && isNanobots(nanobots)) {
+            inventory.setItem(SLOT_OUTPUT, new ItemStack(ModItems.REMOVAL_SYRINGE.get()));
+            inventory.setItem(SLOT_REMAINDER, new ItemStack(ModItems.NANOBOT_VIAL_USED.get()));
+
+            input.shrink(1);
+            syringe.shrink(1);
+            nanobots.shrink(1);
+            return;
+        }
+
+        // --- Рецепт 4: Зелье лечения -> наноботы
+        if (isHealingPotion(input) && isEmptyNanobots(syringe)) {
+            inventory.setItem(SLOT_OUTPUT, new ItemStack(ModItems.NANOBOT_VIAL.get()));
+
+            input.shrink(1);
+            syringe.shrink(1);
+            return;
         }
     }
 
@@ -108,10 +135,27 @@ public class ReplicatorBlockEntity extends BaseContainerBlockEntity implements M
         return !stack.isEmpty() && stack.is(ModItems.NANOBOT_VIAL.get());
     }
 
+    private boolean isEmptyNanobots(ItemStack stack) {
+        return !stack.isEmpty() && stack.is(ModItems.NANOBOT_VIAL_USED.get());
+    }
+
     private boolean isGoldenApple(ItemStack stack) {
         return !stack.isEmpty()
                 && (stack.is(Items.GOLDEN_APPLE)
                 || stack.is(Items.ENCHANTED_GOLDEN_APPLE));
+    }
+
+    private boolean isHealingPotion(ItemStack stack) {
+        if (stack.isEmpty() || !stack.is(Items.POTION)) return false;
+        PotionContents contents = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+        for (MobEffectInstance effect : contents.getAllEffects()) {
+            if (effect.getEffect().is(MobEffects.INSTANT_HEALTH)) return true;
+        }
+        return false;
+    }
+
+    private boolean isShardOfEcho(ItemStack stack) {
+        return !stack.isEmpty() && stack.is(Items.ECHO_SHARD);
     }
 
     @Override
