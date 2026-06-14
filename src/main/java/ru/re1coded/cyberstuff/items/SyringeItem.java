@@ -28,7 +28,7 @@ public class SyringeItem extends Item {
 
     private String implant_name;
 
-    private static final int EFFECT_DURATION = 500;
+    private static final int EFFECT_DURATION = 300;
 
     public SyringeItem(Item.Properties properties) {
         super(properties.stacksTo(1));

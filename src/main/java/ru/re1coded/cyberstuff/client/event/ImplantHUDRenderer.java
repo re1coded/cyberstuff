@@ -52,7 +52,7 @@ public class ImplantHUDRenderer {
 
         // Позиция HUD — внизу по центру, над хотбаром
         int totalWidth = activeImplants.size() * (SLOT_SIZE + SLOT_PADDING) - SLOT_PADDING;
-        int startX = (screenWidth - totalWidth) / 2;
+        int startX = (screenWidth - totalWidth) / 2 + 140;
         int startY = screenHeight - 60; // над хотбаром
 
         for (int i = 0; i < activeImplants.size(); i++) {

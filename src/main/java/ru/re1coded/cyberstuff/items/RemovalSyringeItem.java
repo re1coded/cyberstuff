@@ -6,8 +6,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import ru.re1coded.cyberstuff.client.gui.ImplantScreen;
 import ru.re1coded.cyberstuff.client.gui.ImplantScreenMode;
+import ru.re1coded.cyberstuff.network.RequestSyncImplantSlotsPacket;
 
 public class RemovalSyringeItem extends Item {
 
@@ -18,7 +20,7 @@ public class RemovalSyringeItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (level.isClientSide()) {
-            // Открываем экран выбора на клиенте
+            ClientPacketDistributor.sendToServer(new RequestSyncImplantSlotsPacket());
             Minecraft.getInstance().setScreen(new ImplantScreen(ImplantScreenMode.REMOVAL, hand));
         }
         return InteractionResult.SUCCESS;

@@ -282,6 +282,24 @@ public class ImplantScreen extends Screen {
         return super.mouseClicked(event, doubleClick);
     }
 
+    public void refreshImplants() {
+        Player player = Minecraft.getInstance().player;
+        if (player == null) return;
+
+        ImplantSlots slots = player.getData(ModAttachments.IMPLANT_SLOTS.get());
+        installedImplants = slots.getInstalled();
+        cachedStacks = installedImplants.stream()
+                .map(data -> ImplantRegistry.createStack(
+                        ModItems.IMPLANT.get(), data.id(), data.rarity()
+                ))
+                .collect(Collectors.toList());
+
+        // Сбрасываем выбранный слот если он больше не существует
+        if (selectedImplant != null && !installedImplants.contains(selectedImplant)) {
+            selectedImplant = null;
+        }
+    }
+
     @Override
     public boolean isPauseScreen() { return false; }
 }
